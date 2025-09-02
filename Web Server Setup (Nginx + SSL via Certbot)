@@ -1,0 +1,18 @@
+#!/bin/bash
+set -euo pipefail
+
+DOMAIN="example.com"
+
+apt update
+apt install -y nginx certbot python3-certbot-nginx
+
+# Configure firewall
+ufw allow 'Nginx Full'
+
+# Start nginx
+systemctl enable nginx --now
+
+# SSL Certificate
+certbot --nginx -d $DOMAIN -d www.$DOMAIN
+
+echo "Nginx setup with SSL for $DOMAIN"
