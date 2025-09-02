@@ -1,0 +1,20 @@
+#!/bin/bash
+set -euo pipefail
+
+USERNAME="developer"
+SSH_KEY="ssh-rsa AAAAB3Nza...yourkey..."
+
+# Create user
+id -u "$USERNAME" &>/dev/null || adduser --disabled-password --gecos "" "$USERNAME"
+
+# Add sudo
+usermod -aG sudo "$USERNAME"
+
+# Setup SSH
+mkdir -p /home/$USERNAME/.ssh
+echo "$SSH_KEY" >> /home/$USERNAME/.ssh/authorized_keys
+chmod 700 /home/$USERNAME/.ssh
+chmod 600 /home/$USERNAME/.ssh/authorized_keys
+chown -R $USERNAME:$USERNAME /home/$USERNAME/.ssh
+
+echo "User $USERNAME created and SSH configured."
